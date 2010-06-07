@@ -1,8 +1,10 @@
 from thundercat.response import process_response
 from thundercat import addhost, discover
 from thundercat.ssh import Transport 
+from importlib import import_module
 import config
 import sys
+import os
 
 def main(argv=sys.argv):
     subcommand = argv[1]
@@ -11,9 +13,10 @@ def main(argv=sys.argv):
         discover.discover_command(['discover', argv[2]])
     elif subcommand == 'help':
         host_info = config.get_host_info(argv[2])
-        print host_info['endpoints'][argv[3]]['help_text'].replace('{EXECUTABLE}', argv[0])
+        print host_info['endpoints'][argv[3]]['help_text'].replace('{EXECUTABLE}', os.path.basename(argv[0]))
     else:
-        host_info = config.get_host_info(argv[1])
+        nickname = argv[1]
+        host_info = config.get_host_info(nickname)
         if host_info:
             endpoint = host_info['endpoints'].get(argv[2], None) if len(argv) > 2 else None
             if endpoint:
@@ -36,7 +39,13 @@ def main(argv=sys.argv):
                     try:
                         result = possibility % response_dict
                         transport = Transport(host_info['url'])
-                        print transport.request(result)
+                        response = transport.request(result)
+                        try:
+                            module = import_module('thundercat.plugins.%s' % argv[2])
+                            target = getattr(module, 'main', lambda x: x)
+                            print target(nickname, host_info, response)
+                        except ImportError:
+                            print response
                     except (TypeError, KeyError) as e:
                         pass
             else:
