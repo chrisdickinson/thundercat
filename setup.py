@@ -16,7 +16,7 @@ A command line interface to nappingcat servers. Allows the user to create, fork,
 """.strip(),
     license = "BSD",
     keywords = "ssh git client",
-    url = "http://github.com/chrisdickinson/thundercat/",
+    url = "http://github.com/downloads/chrisdickinson/thundercat/thundercat-0.1.tar.gz",
 
     entry_points = {
         'console_scripts': [
