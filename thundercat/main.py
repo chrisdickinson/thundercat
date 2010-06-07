@@ -1,4 +1,5 @@
 from thundercat.response import process_response
+from thundercat import addhost, discover
 from thundercat.ssh import Transport 
 import config
 import sys
@@ -14,7 +15,7 @@ def main(argv=sys.argv):
     else:
         host_info = config.get_host_info(argv[1])
         if host_info:
-            endpoint = host_info['endpoints'].get(argv[2], None)
+            endpoint = host_info['endpoints'].get(argv[2], None) if len(argv) > 2 else None
             if endpoint:
                 simple_regex = endpoint['regex']
                 for possibility, arg_names in simple_regex:
@@ -41,7 +42,7 @@ def main(argv=sys.argv):
             else:
                 print process_response({
                     'content': {
-                        'message':'Bad endpoint %s\nAvailable endpoints:\n\t%s\n' % (argv[2], '\n\t'.join(host_info['endpoints'].keys())), 
+                        'message':'Bad endpoint %s\nAvailable endpoints:\n\t%s\n' % (argv[2] if len(argv) > 2 else "<none provided>", '\n\t'.join(host_info['endpoints'].keys())), 
                     },
                     'status_code':404,
                 })
