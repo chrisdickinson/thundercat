@@ -43,5 +43,5 @@ serious refactoring in the near futures.
 Also notable -- I'm borrowing the regex_helpers library from Django for the time being to provide a `reverse`-like
 behavior for thundercat. Thanks (and sorry) guys!
 
-Also, it's a command line program named after (the kid's tv show thundercats)[http://www.youtube.com/watch?v=P_cpV00c4IE],
+Also, it's a command line program named after [the kid's tv show thundercats](http://www.youtube.com/watch?v=P_cpV00c4IE),
 so... you might have to live with that.
