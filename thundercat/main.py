@@ -5,7 +5,7 @@ from importlib import import_module
 import config
 import sys
 import os
-
+import StringIO
 def main(argv=sys.argv):
     if len(argv) < 2:
         print "thundercat - client for interfacing with nappingcat servers"
@@ -34,7 +34,7 @@ def main(argv=sys.argv):
                     available_args = argv[3:]
                     available_args.reverse()
                     for arg_name in arg_names:
-                        parameter_type = endpoint['params'].get(arg_name, None)
+                        parameter_type = endpoint['params'].pop(arg_name, None)
                         if isinstance(parameter_type, list):
                             available_args.reverse()
                             response_dict[arg_name] = parameter_type[1].join(available_args) 
@@ -44,16 +44,23 @@ def main(argv=sys.argv):
                                 response_dict[arg_name] = available_args.pop()
                             except IndexError:
                                 pass
+                    file = None
+                    for key, type in endpoint['params'].iteritems():
+                        if type == 'stdin':
+                            with open(available_args.pop(), 'r') as input:
+                                file = StringIO.StringIO(input.read())
+                            break
                     try:
                         result = possibility % response_dict
                         transport = Transport(host_info['url'])
-                        response = transport.request(result)
+                        response = transport.request(result, file)
                         try:
                             module = import_module('thundercat.plugins.%s' % argv[2])
                             target = getattr(module, 'main', lambda x: x)
                             print target(nickname, host_info, response)
                         except ImportError:
                             print response
+                        return
                     except (TypeError, KeyError) as e:
                         pass
             else:
