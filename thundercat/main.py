@@ -7,6 +7,14 @@ import sys
 import os
 
 def main(argv=sys.argv):
+    if len(argv) < 2:
+        print "thundercat - client for interfacing with nappingcat servers"
+        print "usage:"
+        print "\tthundercat addremote <nickname> <git@someurl.com>"
+        print "\tthundercat help <nickname> <command>"
+        print "\tthundercat <nickname> -- list commands"
+        print "\tthundercat <nickname> <command> <args> -- send a command to the host"
+        return
     subcommand = argv[1]
     if subcommand == 'addremote':
         addhost.add_host(argv[1:4])
