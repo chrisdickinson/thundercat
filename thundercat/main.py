@@ -3,7 +3,7 @@ from thundercat.ssh import Transport
 import config
 import sys
 
-def main(argv):
+def main(argv=sys.argv):
     subcommand = argv[1]
     if subcommand == 'addremote':
         addhost.add_host(argv[1:4])

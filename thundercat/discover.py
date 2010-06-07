@@ -1,5 +1,5 @@
 from thundercat import config
-from ssh import Transport 
+from thundercat.ssh import Transport 
 from thundercat.regex_helper import normalize
 import sys
 

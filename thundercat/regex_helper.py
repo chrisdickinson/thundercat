@@ -1,3 +1,7 @@
+# THIS IS TOTALLY BORROWED FROM DJANGO
+# SORRY GUYS
+# I'll probably switch to something simpler in the future.
+
 """
 Functions for reversing a regular expression (used in reverse URL resolving).
 Used internally by Django and not intended for external use.
